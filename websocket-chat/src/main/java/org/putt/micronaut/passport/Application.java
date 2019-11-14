@@ -1,4 +1,4 @@
-package websocket.chat;
+package org.putt.micronaut.passport;
 
 import io.micronaut.runtime.Micronaut;
 

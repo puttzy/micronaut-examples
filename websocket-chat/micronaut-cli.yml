@@ -1,5 +1,5 @@
 profile: service
-defaultPackage: websocket.chat
+defaultPackage: org.putt.micronaut.passport
 ---
 testFramework: junit
 sourceLanguage: java

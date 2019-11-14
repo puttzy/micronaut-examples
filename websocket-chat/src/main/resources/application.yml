@@ -7,3 +7,12 @@ micronaut:
                 enabled: true
                 mapping: /**
                 paths: classpath:public
+    io:
+        watch:
+            paths: src/main
+            restart: true
+jackson:
+    bean-introspection-module: true
+    deserialization:
+        useBigIntegerForInts: true
+        failOnUnknownProperties: false
