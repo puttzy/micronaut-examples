@@ -1,7 +1,6 @@
 package org.putt.micronaut.passport.dao;
 
-import org.putt.micronaut.passport.model.RequestFactory;
-import org.putt.micronaut.passport.model.ResponseFactory;
+import org.putt.micronaut.passport.model.response.FactoryResponse;
 
 import javax.inject.Singleton;
 import java.util.ArrayList;
@@ -12,30 +11,33 @@ import java.util.Map;
 @Singleton
 public class FactoryDao {
 
-    static Map<Integer, ResponseFactory> factoryMap = new HashMap<>();
+    private static Map<Integer, FactoryResponse> factoryMap = new HashMap<>();
 
-    static int id = 0;
+    private static Integer id = 0;
 
-    public List<ResponseFactory> getAllFactories(){
+
+    public List<FactoryResponse> getAllFactories(){
         return new ArrayList(factoryMap.values());
     }
 
-    public ResponseFactory getNodeById(Integer id){
+    public FactoryResponse getFactoryById(Integer id){
         return factoryMap.get(id);
     }
 
-    public ResponseFactory updateFactoryName(Integer id, String name){
-        ResponseFactory responseFactory =  factoryMap.get(id);
-        responseFactory.setName(name);
-        factoryMap.put(id, responseFactory);
-        return responseFactory;
+
+
+    public void updateFactory(FactoryResponse factoryResponse){
+
+        factoryMap.put(factoryResponse.getId(), factoryResponse);
+
     }
 
-    public ResponseFactory createFactory(RequestFactory requestFactory){
-        requestFactory.setId(id++);
-        ResponseFactory responseFactory = new ResponseFactory(requestFactory);
-        responseFactory.setResponseFactoryAction(ResponseFactory.ResponseFactoryAction.ADDED);
-        factoryMap.put(requestFactory.getId(), responseFactory);
-        return responseFactory;
+    public FactoryResponse insertFactory(FactoryResponse factoryResponse){
+        factoryResponse.setId(id++);
+        factoryMap.put(factoryResponse.getId(), factoryResponse);
+        return factoryResponse;
     }
+
+
+
 }

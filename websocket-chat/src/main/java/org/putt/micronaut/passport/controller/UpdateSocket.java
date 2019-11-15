@@ -5,8 +5,8 @@ import io.micronaut.websocket.WebSocketSession;
 import io.micronaut.websocket.annotation.OnClose;
 import io.micronaut.websocket.annotation.OnMessage;
 import io.micronaut.websocket.annotation.ServerWebSocket;
-import org.putt.micronaut.passport.model.RequestFactory;
-import org.putt.micronaut.passport.model.ResponseFactory;
+import org.putt.micronaut.passport.model.request.UpdateFactoryRequest;
+import org.putt.micronaut.passport.model.response.FactoryResponse;
 import org.putt.micronaut.passport.service.Factory;
 import org.putt.micronaut.passport.service.Util;
 import org.reactivestreams.Publisher;
@@ -20,7 +20,7 @@ public class UpdateSocket {
 
 
     private static final String THIS_TOPIC = "update";
-    Factory factory;
+    private Factory factory;
 
     @Inject
     public UpdateSocket(WebSocketBroadcaster broadcaster, Factory factory) {
@@ -29,10 +29,11 @@ public class UpdateSocket {
     }
 
     @OnMessage
-    public Publisher<List<ResponseFactory>> onMessage(
+    public Publisher<List<FactoryResponse>> onMessage(
             String topic,
-            RequestFactory message,
+            UpdateFactoryRequest updateFactoryRequest,
             WebSocketSession session) {
+        factory.updateResponseFactory(updateFactoryRequest);
         return topic.equalsIgnoreCase(THIS_TOPIC) ? broadcaster.broadcast(factory.getAllFactories(), Util.isValid(topic)) : null;
     }
 

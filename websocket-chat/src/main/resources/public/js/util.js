@@ -25,3 +25,57 @@ function socketClosed(){
     loadNodeSocket.close();
     updateNodeSocket.close();
 }
+
+// Short-circuiting, and saving a parse operation
+function isInt(value) {
+    var x;
+    if (isNaN(value)) {
+        return false;
+    }
+    x = parseFloat(value);
+    return (x | 0) === x;
+}
+
+function isArray(what) {
+    return Object.prototype.toString.call(what) === '[object Array]';
+}
+
+
+if(!String.prototype.trim){
+    String.prototype.trim = function(){
+        return this.replace(/^\s+|\s+$/g,'');
+    };
+}
+
+function isBlank(input, label){
+    if (input === "") {
+        alert(label + ' cannot be empty');
+        return true;
+    }
+    return false;
+
+}
+
+
+function addFactories(rawFactoriesJSON){
+    var factoriesJSON = JSON.parse(rawFactoriesJSON);
+
+    for (var i = 0 ; i < factoriesJSON.length ; i++){
+        addFactory(factoriesJSON[i]);
+    }
+}
+
+
+function addFactory(rawFactoryJSON){
+    var factoryJson = JSON.parse(rawFactoryJSON);
+    var factory = tree.createNode(factoryJson.name,false,'images/star.png',null,factoryJson.id,'context1');
+    addNodes(factory, factoryJson.nodes);
+}
+
+function addNodes(factory, nodes){
+    for (var x= 0 ; x < nodes.length ; x++){
+        var node = nodes[x];
+        factory.createChildNode(node.value, false, 'images/leaf.png', 'parent' + node.id + '_' + node.id, 'context1');
+    }
+}
+

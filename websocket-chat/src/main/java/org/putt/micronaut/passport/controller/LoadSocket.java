@@ -6,8 +6,7 @@ import io.micronaut.websocket.annotation.OnClose;
 import io.micronaut.websocket.annotation.OnMessage;
 import io.micronaut.websocket.annotation.OnOpen;
 import io.micronaut.websocket.annotation.ServerWebSocket;
-import org.putt.micronaut.passport.model.RequestFactory;
-import org.putt.micronaut.passport.model.ResponseFactory;
+import org.putt.micronaut.passport.model.response.FactoryResponse;
 import org.putt.micronaut.passport.service.Factory;
 import org.putt.micronaut.passport.service.Util;
 import org.reactivestreams.Publisher;
@@ -21,7 +20,7 @@ public class LoadSocket {
 
     private static final String THIS_TOPIC = "LOAD";
 
-    Factory factory;
+    private Factory factory;
 
     @Inject
     public LoadSocket(WebSocketBroadcaster broadcaster, Factory factory) {
@@ -30,14 +29,14 @@ public class LoadSocket {
     }
 
     @OnOpen
-    public Publisher<List<ResponseFactory>> onOpen(String topic, WebSocketSession session) {
+    public Publisher<List<FactoryResponse>> onOpen(String topic, WebSocketSession session) {
         return topic.equalsIgnoreCase(THIS_TOPIC) ? broadcaster.broadcast(factory.getAllFactories(), Util.isValid(topic)) : null;
     }
 
 
 
     @OnMessage
-    public Publisher<List<ResponseFactory>> onMessage(
+    public Publisher<List<FactoryResponse>> onMessage(
             String topic,
             String message,
             WebSocketSession session) {
