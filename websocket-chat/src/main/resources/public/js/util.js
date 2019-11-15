@@ -20,7 +20,7 @@ id("connection_status").addEventListener("click", function () {
 
 function socketClosed(){
     id("connection_status").classList.replace('greendot', 'reddot' );
-    id("chat").innerHTML = '';
+    //id("chat").innerHTML = '';
     createNodeSocket.close();
     loadNodeSocket.close();
     updateNodeSocket.close();
@@ -67,8 +67,12 @@ function addFactories(rawFactoriesJSON){
 
 
 function addFactory(rawFactoryJSON){
-    var factoryJson = JSON.parse(rawFactoryJSON);
-    var factory = tree.createNode(factoryJson.name,false,'images/star.png',null,factoryJson.id,'context1');
+    factoryJson = rawFactoryJSON;
+    if (isJson(rawFactoryJSON)){
+      factoryJson = JSON.parse(rawFactoryJSON);
+    }
+
+    var factory = tree.createNode(factoryJson.name,false,'images/factory.jpeg',null,factoryJson.id,'factoryMenu');
     addNodes(factory, factoryJson.nodes);
 }
 

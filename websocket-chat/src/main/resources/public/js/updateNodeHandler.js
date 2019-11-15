@@ -1,6 +1,5 @@
 
 updateNodeSocket.onmessage = function (msg) { updateNode(msg); };
-
 updateNodeSocket.onclose = function () {
     socketClosed();
 };
@@ -13,10 +12,7 @@ id("updateFactory_Button").addEventListener("click", function () {
 //Send a message if it's not empty, then clear the input field
 function sendUpdateMessage() {
     var updateMessage = new updateFactoryRequest();
-    alert(JSON.stringify(updateMessage));
     updateNodeSocket.send(JSON.stringify(updateMessage));
-
-
 }
 
 //Update the node specific node

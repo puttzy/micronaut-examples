@@ -14,7 +14,7 @@ import org.reactivestreams.Publisher;
 import javax.inject.Inject;
 import java.util.List;
 
-@ServerWebSocket("/load/{topic}")
+@ServerWebSocket("/load/{topic}/{sessionId}")
 public class LoadSocket {
     private WebSocketBroadcaster broadcaster;
 
@@ -29,8 +29,8 @@ public class LoadSocket {
     }
 
     @OnOpen
-    public Publisher<List<FactoryResponse>> onOpen(String topic, WebSocketSession session) {
-        return topic.equalsIgnoreCase(THIS_TOPIC) ? broadcaster.broadcast(factory.getAllFactories(), Util.isValid(topic)) : null;
+    public Publisher<List<FactoryResponse>> onOpen(String topic, String sessionId, WebSocketSession session) {
+        return topic.equalsIgnoreCase(THIS_TOPIC) ? broadcaster.broadcast(factory.getAllFactories(), Util.isValid(topic, sessionId)) : null;
     }
 
 
@@ -46,10 +46,11 @@ public class LoadSocket {
 
     @OnClose
     public Publisher<String> onClose(
+            String sessionId,
             WebSocketSession session) {
-        String msg = "["+ THIS_TOPIC +"  Disconnected!";
+        String msg = "["+ THIS_TOPIC +"]  Disconnected!";
 
-        return broadcaster.broadcast(msg);
+        return broadcaster.broadcast(msg, Util.isValid(sessionId));
     }
 
 

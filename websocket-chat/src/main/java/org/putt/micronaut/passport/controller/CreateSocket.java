@@ -13,7 +13,7 @@ import org.reactivestreams.Publisher;
 
 import javax.inject.Inject;
 
-@ServerWebSocket("/create/{topic}")
+@ServerWebSocket("/create/{topic}/{sessionId}")
 public class CreateSocket {
     private WebSocketBroadcaster broadcaster;
     private Factory factory;
@@ -39,10 +39,11 @@ public class CreateSocket {
 
     @OnClose
     public Publisher<String> onClose(
+            String sessionId,
             WebSocketSession session) {
-        String msg = "["+ THIS_TOPIC +"  Disconnected!";
+        String msg = "["+ THIS_TOPIC +"]  Disconnected!";
 
-        return broadcaster.broadcast(msg);
+        return broadcaster.broadcast(msg, Util.isValid(sessionId));
     }
 
 

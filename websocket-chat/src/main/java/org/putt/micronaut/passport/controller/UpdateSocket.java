@@ -14,7 +14,7 @@ import org.reactivestreams.Publisher;
 import javax.inject.Inject;
 import java.util.List;
 
-@ServerWebSocket("/update/{topic}")
+@ServerWebSocket("/update/{topic}/{sessionId}")
 public class UpdateSocket {
     private WebSocketBroadcaster broadcaster;
 
@@ -31,6 +31,7 @@ public class UpdateSocket {
     @OnMessage
     public Publisher<List<FactoryResponse>> onMessage(
             String topic,
+            String sessionId,
             UpdateFactoryRequest updateFactoryRequest,
             WebSocketSession session) {
         factory.updateResponseFactory(updateFactoryRequest);
@@ -40,10 +41,11 @@ public class UpdateSocket {
 
     @OnClose
     public Publisher<String> onClose(
+            String sessionId,
             WebSocketSession session) {
-        String msg = "["+ THIS_TOPIC +"  Disconnected!";
+        String msg = "["+ THIS_TOPIC +"]  Disconnected!";
 
-        return broadcaster.broadcast(msg);
+        return broadcaster.broadcast(msg, Util.isValid(sessionId));
     }
 
 }
